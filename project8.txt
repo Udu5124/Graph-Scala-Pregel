@@ -1,0 +1,17 @@
+You are asked to re-implement Project #5 (Graph Processing) using Pregel on Spark GraphX. That is, your program must find the connected components of any undirected graph and print the size of these connected components. An empty project8/src/main/scala/Graph.scala is provided, as well as scripts to build and run this code on Comet. You should modify Graph.scala only. You should use the pregel method from the GraphX Pregel API only to write your code. Your main program should take the text file that contains the graph (small-graph.txt or large-graph.txt) as an argument and print the results to the output. The stopping condition is when the number of repetition reaches 5.
+
+You can compile Graph.scala using:
+
+run graph.build
+and you can run it in local mode over the small graph using:
+sbatch graph.local.run
+You should modify and run your programs in local mode until you get the correct result. After you make sure that your program runs correctly in local mode, you run it in distributed mode using:
+sbatch graph.distr.run
+This will work on the moderate-sized graph and will print the results to the output.
+The following pseudo-code finds the connected components using Pregel:
+
+Read the input graph and construct the RDD of edges
+Use the graph builder Graph.fromEdges to construct a Graph from the RDD of edges
+Access the VertexRDD and change the value of each vertex to be the vertex ID (initial group number)
+Call the Graph.pregel method in the GraphX Pregel API to find the connected components. For each vertex, this method changes its group number to the minimum group number of its neighbors (if it is less than its current group number)
+Group the graph vertices by their group number and print the group sizes.
